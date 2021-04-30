@@ -1,0 +1,184 @@
+//body
+//  padding: 50px
+//  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif
+
+//palette
+$green: #a2ccb6
+$light-peach: #ffecd9
+$peach: #ee786e
+$sand: #fceeb5
+$white: #fff
+
+body
+  //background: $light-peach
+  display: grid
+  //height: 100vh
+  margin: 0
+  place-items: center
+  padding: 1rem
+  background-image: linear-gradient(to bottom right, #E1BEE7, #B2EBF2)
+  height: 100vh
+
+a
+  color: #00B7FF
+
+
+h1
+  font-family: Helvetica, sans-serif
+  font-weight: 100
+  color: #fff
+
+  letter-spacing: 0.5em
+  text-align: center
+  margin-top: 50px
+  line-height: 1.6em
+
+
+p
+  font-family: Helvetica, sans-serif
+  font-weight: 100
+  color: #fff
+  font-size: 1.1em
+  text-align: center
+  margin: 110px auto 20px
+  letter-spacing: 0.05em
+
+
+
+
+button
+  -webkit-appearance: none
+  background: -webkit-gradient(to right,$green 0%,$sand 50%,$peach 100%)
+  background: linear-gradient(to right,$green 0%,$sand 50%,$peach 100%)
+  background-size: 500%
+  border: none
+  border-radius: 5rem
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)
+  color: $white
+  cursor: pointer
+  font: 1.5em Raleway, sans-serif
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
+  height: 5rem
+  letter-spacing: .05em
+  outline: none
+  -webkit-tap-highlight-color: transparent
+  -webkit-user-select: none
+  -moz-user-select: none
+  -ms-user-select: none
+  user-select: none
+  width: 20rem
+
+button:hover
+  animation-name: gradient
+  -webkit-animation-name: gradient
+  animation-duration: 2s
+  -webkit-animation-duration: 2s
+  animation-iteration-count: 1
+  -webkit-animation-iteration-count: 1
+  animation-fill-mode: forwards
+  -webkit-animation-fill-mode: forwards
+
+@keyframes gradient
+  0%
+    background-position: 0% 50%
+  100%
+    background-position: 100%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+//
+//.container
+//  text-align: center
+//  position: relative
+//  width: 300px
+//  margin: 0 auto
+//  cursor: pointer
+//
+//
+//button
+//  font-family: Helvetica, sans-serif
+//  font-weight: 100
+//  color: #fff
+//
+//button
+//  position: relative
+//  height: 50px
+//  width: 280px
+//  border: 0
+//  border-radius: 5px
+//  text-transform: uppercase
+//  font-size: 1.1em
+//  letter-spacing: 0.2em
+//  overflow: hidden
+//  box-shadow: 0 4px 12px 0 rgba(152, 160, 180, 10)
+//  z-index: 1
+//
+//div.fill-two
+//  position: absolute
+//  background-image: linear-gradient(to right, #E040FB, #00BCD4)
+//  background-size: 150% 150%
+//  height: 70px
+//  width: 420px
+//  border-radius: 5px
+//  margin: -40px 0 0 -140px
+//  transition: all 0.4s ease
+//  z-index: -1
+//
+//
+//div.buttonDiv:hover .fill-two
+//  -webkit-animation: gradient 3s ease infinite
+//  -moz-animation: gradient 3s ease infinite
+//  animation: gradient 3s ease infinite
+//
+//
+//@-webkit-keyframes gradient
+//  0%
+//    background-position: 0% 50%
+//
+//  50%
+//    background-position: 100% 50%
+//
+//  100%
+//    background-position: 0% 50%
+//
+//
+//
+//@-moz-keyframes gradient
+//  0%
+//    background-position: 0% 50%
+//
+//  50%
+//    background-position: 100% 50%
+//
+//  100%
+//    background-position: 0% 50%
+//
+//
+//
+//@keyframes gradient
+//  0%
+//    background-position: 0% 50%
+//
+//  50%
+//    background-position: 100% 50%
+//
+//  100%
+//    background-position: 0% 50%

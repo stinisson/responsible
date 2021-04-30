@@ -1,0 +1,69 @@
+body {
+  display: grid;
+  margin: 0;
+  place-items: center;
+  padding: 1rem;
+  background-image: linear-gradient(to bottom right, #E1BEE7, #B2EBF2);
+  height: 100vh; }
+
+a {
+  color: #00B7FF; }
+
+h1 {
+  font-family: Helvetica, sans-serif;
+  font-weight: 100;
+  color: #fff;
+  letter-spacing: 0.5em;
+  text-align: center;
+  margin-top: 50px;
+  line-height: 1.6em; }
+
+p {
+  font-family: Helvetica, sans-serif;
+  font-weight: 100;
+  color: #fff;
+  font-size: 1.1em;
+  text-align: center;
+  margin: 110px auto 20px;
+  letter-spacing: 0.05em; }
+
+button {
+  -webkit-appearance: none;
+  background: -webkit-gradient(to right, #a2ccb6 0%, #fceeb5 50%, #ee786e 100%);
+  background: linear-gradient(to right, #a2ccb6 0%, #fceeb5 50%, #ee786e 100%);
+  background-size: 500%;
+  border: none;
+  border-radius: 5rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  color: #fff;
+  cursor: pointer;
+  font: 1.5em Raleway, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 5rem;
+  letter-spacing: .05em;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  width: 20rem; }
+
+button:hover {
+  animation-name: gradient;
+  -webkit-animation-name: gradient;
+  animation-duration: 2s;
+  -webkit-animation-duration: 2s;
+  animation-iteration-count: 1;
+  -webkit-animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  -webkit-animation-fill-mode: forwards; }
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%; }
+  100% {
+    background-position: 100%; } }
+
+/*# sourceMappingURL=style.css.map */
