@@ -1,10 +1,10 @@
 body {
+  background-image: linear-gradient(to bottom right, #E1BEE7, #B2EBF2);
   display: grid;
+  height: 100vh;
   margin: 0;
   place-items: center;
-  padding: 1rem;
-  background-image: linear-gradient(to bottom right, #E1BEE7, #B2EBF2);
-  height: 100vh; }
+  padding: 1rem; }
 
 a {
   color: #00B7FF; }
@@ -65,5 +65,8 @@ button:hover {
     background-position: 0% 50%; }
   100% {
     background-position: 100%; } }
+
+#floofmap {
+  height: 180px; }
 
 /*# sourceMappingURL=style.css.map */
