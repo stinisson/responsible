@@ -4,10 +4,10 @@ $(document).ready(() => {
     var mymap = L.map('floofMap').setView([57.71, 11.97], 12);
 
     var greenIcon = L.icon({
-        iconUrl: 'images/smol-dog.jpg',
+        iconUrl: 'images/pup.png',
         //shadowUrl: 'images/smol-dog.jpg',
 
-        iconSize:     [80, 80], // size of the icon
+        iconSize:     [80, 105], // size of the icon
         shadowSize:   [80, 80], // size of the shadow
         iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
         shadowAnchor: [4, 62],  // the same for the shadow
