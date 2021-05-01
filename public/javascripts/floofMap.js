@@ -31,5 +31,34 @@ $(document).ready(() => {
             console.log(xhr);
         });
 
+    smhiEndPoint = "https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/11.97/lat/57.71/data.json";
+
+    $.getJSON(smhiEndPoint, {})
+        .done((forecast) => {
+            //var forecast = forecast;
+            var returnedLatitude = null;
+            var returnedLongitude = null;
+            var approvedTime = new Date(forecast.approvedTime).toISOString().replace(/[a-zA-Z]/g, ' ').substr(0, 16);
+            var referenceTime = new Date(forecast.referenceTime).toISOString().replace(/[a-zA-Z]/g, ' ').substr(0, 16);
+            console.log(forecast['timeSeries'][0]['parameters'][10]['values'][0])
+            var currentTemp = forecast['timeSeries'][0]['parameters'][10]['values'][0]
+
+            $('#weather').text("The temperature is currently " + currentTemp + "°C in Gothenburg");
+        })
+        .fail((xhr) => {
+            alert('Problem contacting server');
+            console.log(xhr);
+        });
+
+    // $.getJSON(smhiEndPoint).done(function (forecast) {
+    //
+    //     smhi.forecast = forecast;
+    //     smhi.returnedLatitude = null;
+    //     smhi.returnedLongitude = null;
+    //     smhi.approvedTime = new Date(forecast.approvedTime).toISOString().replace(/[a-zA-Z]/g, ' ').substr(0, 16);
+    //     smhi.referenceTime = new Date(forecast.referenceTime).toISOString().replace(/[a-zA-Z]/g, ' ').substr(0, 16);
+    //
+    //     callback(forecast);
+    // });
 
 });
