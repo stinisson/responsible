@@ -24,8 +24,11 @@ p {
   color: #fff;
   font-size: 1.1em;
   text-align: center;
-  margin: 110px auto 20px;
+  margin: 10px auto 50px;
   letter-spacing: 0.05em; }
+
+p#dadJoke {
+  margin: 50px auto 20px; }
 
 button {
   -webkit-appearance: none;
@@ -66,7 +69,8 @@ button:hover {
   100% {
     background-position: 100%; } }
 
-#floofmap {
-  height: 180px; }
+#floofMap {
+  height: 800px;
+  width: 800px; }
 
 /*# sourceMappingURL=style.css.map */

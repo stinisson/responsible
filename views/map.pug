@@ -4,11 +4,16 @@ block head
     script(src="https://code.jquery.com/jquery-3.6.0.min.js",
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=",
         crossorigin="anonymous")
+    script(src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js",
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==",
+        crossorigin="")
+
 
 block content
     h1= title
-    p MAP
-    div#floofmap
+    p THE WEATHER IS SUNNY WITH SOME CLOUDS
+    p#dadJoke
+    #floofMap
 
 
     script(src="javascripts/floofMap.js")
