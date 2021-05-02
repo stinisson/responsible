@@ -1,13 +1,4 @@
-
-$(document).ready(() => {
-    console.log('Client-side code running');
-
-    $('#firstButton').on("click", (evt) => {
-        console.log("Clicked submitButton");
-        console.log("Redirect to map");
-        window.location.href = "/map";
-    });
-
+let getWeatherForecast = () => {
     const weatherSymbol = {
         1:  "Clear sky",
         2:  "Nearly clear sky",
@@ -40,116 +31,121 @@ $(document).ready(() => {
     smhiEndPoint = "https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/11.97/lat/57.71/data.json";
     $.getJSON(smhiEndPoint, {})
         .done((forecast) => {
-            //var forecast = forecast;
-            var returnedLatitude = null;
-            var returnedLongitude = null;
-            var approvedTime = new Date(forecast.approvedTime).toISOString().replace(/[a-zA-Z]/g, ' ').substr(0, 16);
-            var referenceTime = new Date(forecast.referenceTime).toISOString().replace(/[a-zA-Z]/g, ' ').substr(0, 16);
-            var currentTemp = forecast['timeSeries'][0]['parameters'][10]['values'][0]
-            //Wsymb2
-            console.log(forecast['timeSeries'][0])
-            var currentWeather = forecast['timeSeries'][0]['parameters'][18]['values'][0];
-
-            console.log(forecast['timeSeries'][0]['parameters'][11]['values'][0]);
-
+            let currentTemp = forecast['timeSeries'][0]['parameters'][10]['values'][0]
+            let currentWeather = forecast['timeSeries'][0]['parameters'][18]['values'][0];
+            let forecastValidTime = new Date(forecast['timeSeries'][0]['validTime']).toISOString().replace('T', ' ').substr(0, 16);
+            forecastValidTime += 'Z';
+            console.log(forecastValidTime);
             $('#weather').text("The temperature is " + currentTemp + "°C with " + weatherSymbol[currentWeather].toLowerCase() + " in Gothenburg.");
         })
         .fail((xhr) => {
             alert('Problem contacting server');
             console.log(xhr);
         });
+}
 
-
-    const DATA_COUNT = 7;
-    const NUMBER_CFG = {count: DATA_COUNT, min: -100, max: 100};
-
-    const labels = [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December'
-    ];
-
-    const data = {
-        labels: labels,
-        datasets: [
-            {
-                label: 'Dataset 1',
-                data: [1, 2, 3, 4, 10, 12],
-                borderColor: 'rgb(255, 205, 86)',
-                backgroundColor: 'rgb(255, 205, 86)',
-            }
-        ]
-    };
-
-    const config = {
-        type: 'line',
-        data: data,
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                title: {
-                    display: true,
-                    text: 'Chart.js Line Chart'
-                }
-            }
-        },
-    };
-
-    var myChart = new Chart(
-        document.getElementById('myChart').getContext('2d'),
-        config, data
-    );
-
-
-    // var ctx = document.getElementById('myChart').getContext('2d');
-    // var myChart = new Chart(ctx, {
-    //     type: 'bar',
-    //     data: {
-    //         labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-    //         datasets: [{
-    //             label: '# of Votes',
-    //             data: [12, 19, 3, 5, 2, 3],
-    //             backgroundColor: [
-    //                 'rgba(255, 99, 132, 0.2)',
-    //                 'rgba(54, 162, 235, 0.2)',
-    //                 'rgba(255, 206, 86, 0.2)',
-    //                 'rgba(75, 192, 192, 0.2)',
-    //                 'rgba(153, 102, 255, 0.2)',
-    //                 'rgba(255, 159, 64, 0.2)'
-    //             ],
-    //             borderColor: [
-    //                 'rgba(255, 99, 132, 1)',
-    //                 'rgba(54, 162, 235, 1)',
-    //                 'rgba(255, 206, 86, 1)',
-    //                 'rgba(75, 192, 192, 1)',
-    //                 'rgba(153, 102, 255, 1)',
-    //                 'rgba(255, 159, 64, 1)'
-    //             ],
-    //             borderWidth: 1
-    //         }]
-    //     },
+let displayTempChart = () => {
+    // const DATA_COUNT = 7;
+    // const NUMBER_CFG = {count: DATA_COUNT, min: -100, max: 100};
+    //
+    // const labels = [
+    //     'January',
+    //     'February',
+    //     'March',
+    //     'April',
+    //     'May',
+    //     'June',
+    //     'July',
+    //     'August',
+    //     'September',
+    //     'October',
+    //     'November',
+    //     'December'
+    // ];
+    //
+    // const data = {
+    //     labels: labels,
+    //     datasets: [
+    //         {
+    //             label: 'Dataset 1',
+    //             data: [1, 2, 3, 4, 10, 12],
+    //             borderColor: 'rgb(255, 205, 86)',
+    //             backgroundColor: 'rgb(255, 205, 86)',
+    //         }
+    //     ]
+    // };
+    //
+    // const config = {
+    //     type: 'line',
+    //     data: data,
     //     options: {
-    //         scales: {
-    //             y: {
-    //                 beginAtZero: true
+    //         responsive: true,
+    //         plugins: {
+    //             legend: {
+    //                 position: 'top',
+    //             },
+    //             title: {
+    //                 display: true,
+    //                 text: 'Chart.js Line Chart'
     //             }
     //         }
-    //     }
-    // });
+    //     },
+    // };
+    //
+    // var myChart = new Chart(
+    //     document.getElementById('myChart').getContext('2d'),
+    //     config, data
+    // );
 
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+            datasets: [{
+                label: '# of Votes',
+                data: [12, 19, 3, 5, 2, 3],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
 
+}
+
+$(document).ready(() => {
+    console.log('Client-side code running');
+
+    $('#firstButton').on("click", (evt) => {
+        console.log("Clicked submitButton");
+        console.log("Redirect to map");
+        window.location.href = "/map";
+    });
+
+    getWeatherForecast();
+    displayTempChart();
 
 });
 

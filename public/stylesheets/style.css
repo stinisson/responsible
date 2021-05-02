@@ -1,7 +1,7 @@
 body {
   background-image: linear-gradient(to bottom right, #E1BEE7, #B2EBF2);
   display: grid;
-  height: 100vh;
+  height: 150vh;
   margin: 0;
   place-items: center;
   padding: 1rem; }
@@ -70,6 +70,10 @@ button:hover {
     background-position: 100%; } }
 
 #floofMap {
+  height: 800px;
+  width: 800px; }
+
+#myChart {
   height: 800px;
   width: 800px; }
 
