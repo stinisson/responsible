@@ -1,5 +1,4 @@
-
-
+const mongodb = require('mongodb');
 
 var createError = require('http-errors');
 var express = require('express');
@@ -8,9 +7,14 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var sassMiddleware = require('node-sass-middleware');
 
+// MongoDB setup
+const MongoClient = mongodb.MongoClient;
+const dbURL = "mongodb://localhost";
+
 var indexRouter = require('./routes/index');
 var mapRouter = require('./routes/map');
 var usersRouter = require('./routes/users');
+//var usersRouter = require('./routes/temp');
 
 var app = express();
 
@@ -33,6 +37,28 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/map', mapRouter);
 app.use('/users', usersRouter);
+//app.use('/getTemp', tempRouter);
+
+
+MongoClient.connect(dbURL, { useUnifiedTopology: true }, (err, client) => {
+  if (err) throw err;
+
+  else {
+    const db = client.db('responsible');
+    const tempReading = db.collection('tempReading');
+    tempReading.find({}).toArray( (err, tempData) => {
+      if (err) throw err;
+      else {
+        console.log("\n\t\t\t\t\tTEMPREADING")
+        tempData.forEach(element => {
+          console.log(element);
+        });
+      }
+      client.close();
+      //res.json( {result: tempData} );
+    });
+  }
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
