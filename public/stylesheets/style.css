@@ -24,7 +24,7 @@ p {
   color: #fff;
   font-size: 1.1em;
   text-align: center;
-  margin: 10px auto 40px;
+  margin: 10px auto 20px;
   letter-spacing: 0.05em; }
 
 p#dadJoke {
@@ -63,6 +63,16 @@ button:hover {
   -webkit-animation-iteration-count: 1;
   animation-fill-mode: forwards;
   -webkit-animation-fill-mode: forwards; }
+
+#tempReading {
+  font: 60px Raleway, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: .05em;
+  color: #ff9f40;
+  text-align: center;
+  margin-top: 10px;
+  line-height: 1.6em; }
 
 @keyframes gradient {
   0% {

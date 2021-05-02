@@ -171,6 +171,8 @@ let displayTempChart = () => {
 $(document).ready(() => {
     console.log('Client-side code running');
 
+    $('#tempReading').text('22 °C');
+
     $('#snapshotBtn').on("click", (evt) => {
         console.log("Clicked submitButton");
         console.log("Redirect to map");
