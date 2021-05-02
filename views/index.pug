@@ -5,14 +5,15 @@ block head
     integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=",
     crossorigin="anonymous")
 
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.2.0/chart.js")
+
+
+
 block content
   h1= title
   p THE WEATHER IS SUNNY WITH SOME CLOUDS
   button#firstButton(type="button") CHECK ON CHARLIE
-
+  canvas#myChart
 
   script(src="javascripts/responsible.js")
-
-
-
-
+  script(src="javascripts/utils.js", type="module")
