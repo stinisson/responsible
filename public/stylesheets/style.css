@@ -24,11 +24,11 @@ p {
   color: #fff;
   font-size: 1.1em;
   text-align: center;
-  margin: 10px auto 50px;
+  margin: 10px auto 40px;
   letter-spacing: 0.05em; }
 
 p#dadJoke {
-  margin: 50px auto 20px; }
+  margin: 30px auto 0px; }
 
 button {
   -webkit-appearance: none;
@@ -51,7 +51,8 @@ button {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  width: 20rem; }
+  width: 20rem;
+  margin: 10px auto 20px; }
 
 button:hover {
   animation-name: gradient;
@@ -70,8 +71,8 @@ button:hover {
     background-position: 100%; } }
 
 #floofMap {
-  height: 600px;
-  width: 600px; }
+  height: 500px;
+  width: 1000px; }
 
 #chartSection {
   width: 50%; }
