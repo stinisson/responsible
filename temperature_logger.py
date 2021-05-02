@@ -12,7 +12,7 @@ sensor_name = 'zuk1-6087db250d7ad41b79664ccc'
 
 
 while True:
-    ct = datetime.datetime.utcnow()
+    ct = datetime.datetime.now()
     ts = ct.timestamp()
     randomTemp = random.randint(-25, 60)
 

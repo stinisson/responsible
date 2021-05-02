@@ -44,59 +44,7 @@ let getWeatherForecast = () => {
         });
 }
 
-let displayTempChart = () => {
-    // const DATA_COUNT = 7;
-    // const NUMBER_CFG = {count: DATA_COUNT, min: -100, max: 100};
-    //
-    // const labels = [
-    //     'January',
-    //     'February',
-    //     'March',
-    //     'April',
-    //     'May',
-    //     'June',
-    //     'July',
-    //     'August',
-    //     'September',
-    //     'October',
-    //     'November',
-    //     'December'
-    // ];
-    //
-    // const data = {
-    //     labels: labels,
-    //     datasets: [
-    //         {
-    //             label: 'Dataset 1',
-    //             data: [1, 2, 3, 4, 10, 12],
-    //             borderColor: 'rgb(255, 205, 86)',
-    //             backgroundColor: 'rgb(255, 205, 86)',
-    //         }
-    //     ]
-    // };
-    //
-    // const config = {
-    //     type: 'line',
-    //     data: data,
-    //     options: {
-    //         responsive: true,
-    //         plugins: {
-    //             legend: {
-    //                 position: 'top',
-    //             },
-    //             title: {
-    //                 display: true,
-    //                 text: 'Chart.js Line Chart'
-    //             }
-    //         }
-    //     },
-    // };
-    //
-    // var myChart = new Chart(
-    //     document.getElementById('temperatureChart').getContext('2d'),
-    //     config, data
-    // );
-
+let displayTempChart = (tempData, tempTS) => {
     const chartColors = {
         red: 'rgb(255, 99, 132)',
         orange: 'rgb(255, 159, 64)',
@@ -115,8 +63,9 @@ let displayTempChart = () => {
 
     let tempBackgroundColor = [];
     let tempBorderColor = [];
-    //let tempData = [21, 0, 15, 20, 30, 50];
-    let tempData = [-20, -5, 0, 15, 20, 30]
+    //let tempData = [-20, -5, 0, 15, 20, 30]
+
+    //let tempData = [-20, -5, 0, 15, 20, 30;
 
     tempData.forEach(item => {
         if (item >= 25) {
@@ -141,8 +90,9 @@ let displayTempChart = () => {
     var myChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: ['2021-05-02 13:19', '2021-05-02 13:20Z', '2021-05-02 13:21Z', '2021-05-02 13:22Z', '2021-05-02 13:23Z',
-            '2021-05-02 13:23Z'],
+            // labels: ['2021-05-02 13:19', '2021-05-02 13:20Z', '2021-05-02 13:21Z', '2021-05-02 13:22Z', '2021-05-02 13:23Z',
+            // '2021-05-02 13:23Z'],
+            labels: tempTS,
             datasets: [{
                 label: 'Current temperature',
                 data: tempData,
@@ -171,7 +121,10 @@ let displayTempChart = () => {
 $(document).ready(() => {
     console.log('Client-side code running');
 
-    $('#tempReading').text('22 °C');
+    let tempData = [];
+    let tempTS = [];
+
+    //$('#tempReading').text('22 °C');
 
     $('#snapshotBtn').on("click", (evt) => {
         console.log("Clicked submitButton");
@@ -179,8 +132,43 @@ $(document).ready(() => {
         window.location.href = "/map";
     });
 
-    getWeatherForecast();
-    displayTempChart();
+
+
+    $.get('/getTemp', {})
+        .done((data) => {
+            console.log("Temperature readings: " + data['result']);
+            data['result'].forEach(element => {
+
+                console.log("LENGHT ", data['result'].length);
+                // TODO loop over length of retrieved temp items
+                for(let i = 0; i < 10; i++) {
+                    let latestTempReading = element['temperature'][i]['degreesCelsius'];
+                    tempData.push(latestTempReading);
+
+                    let latestReading = element['temperature'][i]['timestamp'];
+                    latestReading = new Date(latestReading * 1000).toString().substr(15, 6);
+                    tempTS.push(latestReading);
+                }
+                // TODO get the latest reading, resolve named element
+                let latestTempReading = element['temperature'][9]['degreesCelsius'];
+                let latestReading = element['temperature'][9]['timestamp'];
+                latestReading = new Date(latestReading * 1000);
+
+                console.log(element);
+                console.log(latestTempReading);
+                console.log(latestReading);
+                $('#tempReading').text(latestTempReading + ' °C');
+                $('#tempReadingTS').text('Latest reading: ' + latestReading.toString().substr(0, 21));
+
+
+            })
+            getWeatherForecast();
+            displayTempChart(tempData, tempTS);
+        })
+        .fail((xhr) => {
+            alert('Problem contacting server');
+            console.log(xhr);
+        });
 
 });
 
