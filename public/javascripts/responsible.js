@@ -97,33 +97,59 @@ let displayTempChart = () => {
     //     config, data
     // );
 
+    const chartColors = {
+        red: 'rgb(255, 99, 132)',
+        orange: 'rgb(255, 159, 64)',
+        yellow: 'rgb(255, 205, 86)',
+        green: 'rgb(75, 192, 192)',
+        blue: 'rgb(54, 162, 235)',
+    };
+
+    const chartColorsTransparent = {
+        red: 'rgba(255, 99, 132, 0.8)',
+        orange: 'rgba(255, 159, 64, 0.8)',
+        yellow: 'rgba(255, 205, 86, 0.8)',
+        green: 'rgba(75, 192, 192, 0.8)',
+        blue: 'rgba(54, 162, 235, 0.8)'
+    }
+
+    let tempBackgroundColor = [];
+    let tempBorderColor = [];
+    //let tempData = [21, 0, 15, 20, 30, 50];
+    let tempData = [-20, -5, 0, 15, 20, 30]
+
+    tempData.forEach(item => {
+        if (item >= 25) {
+            tempBorderColor.push(chartColors.red);
+            tempBackgroundColor.push(chartColorsTransparent.red);
+        }
+        else if (item >= 20 && item < 25) {
+            tempBorderColor.push(chartColors.orange);
+            tempBackgroundColor.push(chartColorsTransparent.orange);
+        }
+        else if (item > 0 && item < 20) {
+            tempBorderColor.push(chartColors.green);
+            tempBackgroundColor.push(chartColorsTransparent.green);
+        }
+        else if (item <= 0) {
+            tempBorderColor.push(chartColors.blue);
+            tempBackgroundColor.push(chartColorsTransparent.blue);
+        }
+    });
+
     var ctx = document.getElementById('temperatureChart').getContext('2d');
     var myChart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: ['2021-05-02 13:19', '2021-05-02 13:20Z', '2021-05-02 13:21Z', '2021-05-02 13:22Z', '2021-05-02 13:23Z',
             '2021-05-02 13:23Z'],
-            //labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
             datasets: [{
                 label: 'Current temperature',
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
+                data: tempData,
+                backgroundColor: tempBackgroundColor,
+                borderColor: tempBorderColor[tempBorderColor.length - 1],
+                borderWidth: 2,
+                pointRadius: 7
             }]
         },
         options: {
