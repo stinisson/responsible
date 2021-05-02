@@ -1,7 +1,5 @@
 
 $(document).ready(() => {
-
-
     console.log('Client-side code running');
 
     $('#firstButton').on("click", (evt) => {
@@ -9,6 +7,57 @@ $(document).ready(() => {
         console.log("Redirect to map");
         window.location.href = "/map";
     });
+
+    const weatherSymbol = {
+        1:  "Clear sky",
+        2:  "Nearly clear sky",
+        3:  "Variable cloudiness",
+        4:  "Halfclear sky",
+        5:  "Cloudy sky",
+        6:  "Overcast",
+        7:  "Fog",
+        8:  "Light rain showers",
+        9:  "Moderate rain showers",
+        10: "Heavy rain showers",
+        11: "Thunderstorm",
+        12: "Light sleet showers",
+        13: "Moderate sleet showers",
+        14: "Heavy sleet showers",
+        15: "Light snow showers",
+        16: "Moderate snow showers",
+        17: "Heavy snow showers",
+        18: "Light rain",
+        19: "Moderate rain",
+        20: "Heavy rain",
+        21: "Thunder",
+        22: "Light sleet",
+        23: "Moderate sleet",
+        24: "Heavy sleet",
+        25: "Light snowfall",
+        26: "Moderate snowfall",
+        27: "Heavy snowfall"
+    }
+    smhiEndPoint = "https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/11.97/lat/57.71/data.json";
+    $.getJSON(smhiEndPoint, {})
+        .done((forecast) => {
+            //var forecast = forecast;
+            var returnedLatitude = null;
+            var returnedLongitude = null;
+            var approvedTime = new Date(forecast.approvedTime).toISOString().replace(/[a-zA-Z]/g, ' ').substr(0, 16);
+            var referenceTime = new Date(forecast.referenceTime).toISOString().replace(/[a-zA-Z]/g, ' ').substr(0, 16);
+            var currentTemp = forecast['timeSeries'][0]['parameters'][10]['values'][0]
+            //Wsymb2
+            console.log(forecast['timeSeries'][0])
+            var currentWeather = forecast['timeSeries'][0]['parameters'][18]['values'][0];
+
+            console.log(forecast['timeSeries'][0]['parameters'][11]['values'][0]);
+
+            $('#weather').text("The temperature is " + currentTemp + "°C with " + weatherSymbol[currentWeather].toLowerCase() + " in Gothenburg.");
+        })
+        .fail((xhr) => {
+            alert('Problem contacting server');
+            console.log(xhr);
+        });
 
 
     const DATA_COUNT = 7;
