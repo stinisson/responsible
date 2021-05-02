@@ -28,15 +28,15 @@ let getWeatherForecast = () => {
         26: "Moderate snowfall",
         27: "Heavy snowfall"
     }
-    smhiEndPoint = "https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/11.97/lat/57.71/data.json";
-    $.getJSON(smhiEndPoint, {})
+    endPoint = "https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/11.97/lat/57.71/data.json";
+    $.getJSON(endPoint, {})
         .done((forecast) => {
             let currentTemp = forecast['timeSeries'][0]['parameters'][10]['values'][0]
             let currentWeather = forecast['timeSeries'][0]['parameters'][18]['values'][0];
             let forecastValidTime = new Date(forecast['timeSeries'][0]['validTime']).toISOString().replace('T', ' ').substr(0, 16);
             forecastValidTime += 'Z';
             console.log(forecastValidTime);
-            $('#weather').text("The temperature is " + currentTemp + "°C with " + weatherSymbol[currentWeather].toLowerCase() + " in Gothenburg.");
+            $('#weather').text("The weather in Gothenburg is " + currentTemp + " °C with " + weatherSymbol[currentWeather].toLowerCase());
         })
         .fail((xhr) => {
             alert('Problem contacting server');
@@ -93,17 +93,19 @@ let displayTempChart = () => {
     // };
     //
     // var myChart = new Chart(
-    //     document.getElementById('myChart').getContext('2d'),
+    //     document.getElementById('temperatureChart').getContext('2d'),
     //     config, data
     // );
 
-    var ctx = document.getElementById('myChart').getContext('2d');
+    var ctx = document.getElementById('temperatureChart').getContext('2d');
     var myChart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+            labels: ['2021-05-02 13:19', '2021-05-02 13:20Z', '2021-05-02 13:21Z', '2021-05-02 13:22Z', '2021-05-02 13:23Z',
+            '2021-05-02 13:23Z'],
+            //labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
             datasets: [{
-                label: '# of Votes',
+                label: 'Current temperature',
                 data: [12, 19, 3, 5, 2, 3],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
@@ -127,7 +129,12 @@ let displayTempChart = () => {
         options: {
             scales: {
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Temperature °C'
+                    },
                 }
             }
         }
