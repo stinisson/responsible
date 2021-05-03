@@ -1,7 +1,7 @@
 body {
   background-image: linear-gradient(to bottom right, #E1BEE7, #B2EBF2);
   display: grid;
-  height: 100vh;
+  height: 96.5vh;
   margin: 0;
   place-items: center;
   padding: 1rem; }
@@ -15,7 +15,8 @@ h1 {
   color: #fff;
   letter-spacing: 0.5em;
   text-align: center;
-  margin-top: 50px;
+  margin-top: 20px;
+  margin-bottom: 5px;
   line-height: 1.6em; }
 
 p {
@@ -24,7 +25,7 @@ p {
   color: #fff;
   font-size: 1.1em;
   text-align: center;
-  margin: 10px auto 20px;
+  margin: 5px auto 10px;
   letter-spacing: 0.05em; }
 
 p#dadJoke {
@@ -65,7 +66,7 @@ button:hover {
   -webkit-animation-fill-mode: forwards; }
 
 #tempReading {
-  font: 60px Raleway, sans-serif;
+  font: 70px Raleway, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   letter-spacing: .05em;

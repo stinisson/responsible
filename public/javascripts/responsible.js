@@ -191,7 +191,11 @@ $(document).ready(() => {
                 $('#tempReadingTS').text('Something went wrong');
             }
 
+         /*   $('#snapshotBtn').css({            background: linear-gradient(to right,$green 0%,$sand 50%,$peach 100%)
+        })
+            background: -webkit-gradient(to right,$green 0%,$sand 50%,$peach 100%)
 
+*/
             getWeatherForecast();
             displayTempChart(tempData, tempTS);
         })
