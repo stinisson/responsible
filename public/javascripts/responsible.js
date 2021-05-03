@@ -63,20 +63,20 @@ let displayTempChart = (tempData, tempTS) => {
 
     let tempBackgroundColor = [];
     let tempBorderColor = [];
-    tempData.forEach(item => {
-        if (item >= 25) {
+    tempData.forEach(temp => {
+        if (temp > 25) {
             tempBorderColor.push(chartColors.red);
             tempBackgroundColor.push(chartColorsTransparent.red);
         }
-        else if (item >= 20 && item < 25) {
+        else if (temp > 20 && temp <= 25) {
             tempBorderColor.push(chartColors.orange);
             tempBackgroundColor.push(chartColorsTransparent.orange);
         }
-        else if (item > 0 && item < 20) {
+        else if (temp > -5 && temp <= 20) {
             tempBorderColor.push(chartColors.green);
             tempBackgroundColor.push(chartColorsTransparent.green);
         }
-        else if (item <= 0) {
+        else if (temp <= -5) {
             tempBorderColor.push(chartColors.blue);
             tempBackgroundColor.push(chartColorsTransparent.blue);
         }
@@ -156,8 +156,41 @@ $(document).ready(() => {
             });
             let latestTempReading = tempData[tempData.length - 1];
             let latestReading = tempTS[tempTS.length - 1];
+
             $('#tempReading').text(latestTempReading + ' °C');
             $('#tempReadingTS').text('Latest reading: ' + latestReading.toString().substr(0, 21));
+
+            const chartColorsTransparent = {
+                red: 'rgba(255, 99, 132, 0.8)',
+                orange: 'rgba(255, 159, 64, 0.8)',
+                yellow: 'rgba(255, 205, 86, 0.8)',
+                green: 'rgba(75, 192, 192, 0.8)',
+                blue: 'rgba(54, 162, 235, 0.8)'
+            }
+
+            if (latestTempReading > 25) {
+                $("#tempReading").css({"color": chartColorsTransparent.red});
+                $("#tempReadingTS").css({"color": chartColorsTransparent.red});
+            }
+            else if (latestTempReading > 20 && latestTempReading <= 25) {
+                $("#tempReading").css({"color": chartColorsTransparent.orange});
+                $("#tempReadingTS").css({"color": chartColorsTransparent.orange});
+            }
+            else if (latestTempReading > -5 && latestTempReading <= 20) {
+                $("#tempReading").css({"color": chartColorsTransparent.green});
+                $("#tempReadingTS").css({"color": chartColorsTransparent.green});
+            }
+            else if (latestTempReading <= -5) {
+                $("#tempReading").css({"color": chartColorsTransparent.blue});
+                $("#tempReadingTS").css({"color": chartColorsTransparent.blue});
+            }
+            else {
+                $("#tempReading").css({"color": '#FFF'});
+                $("#tempReadingTS").css({"color": '#FFF'});
+                $('#tempReading').text('Something went wrong');
+                $('#tempReadingTS').text('Something went wrong');
+            }
+
 
             getWeatherForecast();
             displayTempChart(tempData, tempTS);
