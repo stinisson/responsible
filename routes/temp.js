@@ -1,12 +1,26 @@
 var express = require('express');
 var router = express.Router();
 const mongodb = require('mongodb');
+const TelegramBot = require('node-telegram-bot-api')
+let botCredentials = require('../telegramBot.json');
+console.log(botCredentials, 'the json obj');
 
 // MongoDB setup
 const MongoClient = mongodb.MongoClient;
 const dbURL = "mongodb://localhost";
 
 router.get('/', (req, res) => {
+
+    const token = botCredentials.accessToken
+    const bot = new TelegramBot(token, { polling: true })
+    bot.onText(/\/echo (.+)/, (msg, match) => {
+
+        const chatId = msg.chat.id
+        const resp = match[1]
+
+        bot.sendMessage(chatId, resp)
+    })
+
 
     MongoClient.connect(dbURL, {useUnifiedTopology: true}, (err, client) => {
         if (err) throw err;
