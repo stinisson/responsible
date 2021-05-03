@@ -12,18 +12,20 @@ a {
 h1 {
   font-family: Helvetica, sans-serif;
   font-weight: 100;
+  font-size: 40px;
   color: #fff;
   letter-spacing: 0.5em;
   text-align: center;
   margin-top: 20px;
   margin-bottom: 5px;
-  line-height: 1.6em; }
+  line-height: 1.6em;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.15); }
 
 p {
   font-family: Helvetica, sans-serif;
   font-weight: 100;
   color: #fff;
-  font-size: 1.1em;
+  font-size: 1.2em;
   text-align: center;
   margin: 5px auto 10px;
   letter-spacing: 0.05em; }
@@ -41,7 +43,7 @@ button {
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
   color: #fff;
   cursor: pointer;
-  font: 1.5em Raleway, sans-serif;
+  font: 1.3em Raleway, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: 5rem;
@@ -66,14 +68,15 @@ button:hover {
   -webkit-animation-fill-mode: forwards; }
 
 #tempReading {
-  font: 70px Raleway, sans-serif;
+  font: 100px Raleway, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   letter-spacing: .05em;
   color: #ff9f40;
   text-align: center;
   margin-top: 10px;
-  line-height: 1.6em; }
+  line-height: 1.6em;
+  text-shadow: 0px 3px 3px rgba(0, 0, 0, 0.15); }
 
 @keyframes gradient {
   0% {
@@ -86,6 +89,6 @@ button:hover {
   width: 1000px; }
 
 #chartSection {
-  width: 50%; }
+  width: 40%; }
 
 /*# sourceMappingURL=style.css.map */

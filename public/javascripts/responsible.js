@@ -108,16 +108,35 @@ let displayTempChart = (tempData, tempTS) => {
                     display: true,
                     title: {
                         display: true,
-                        text: 'Temperature °C'
-
+                        text: 'Temperature °C',
+                        font: {
+                            size: 16
+                        }
                     },
                     grid: {
                         display:false
+                    },
+                    ticks: {
+                        font: {
+                            size: 16
+                        }
                     }
                 },
                 x: {
+                    title: {
+                        display: true,
+                        text: 'Time',
+                        font: {
+                            size: 16
+                        }
+                    },
                     grid: {
                         display:false
+                    },
+                    ticks: {
+                        font: {
+                            size: 16
+                        }
                     }
                 }
             }
@@ -155,7 +174,7 @@ $(document).ready(() => {
                 }
             });
             let latestTempReading = tempData[tempData.length - 1];
-            let latestReading = tempTS[tempTS.length - 1];
+            let latestReading = tempTS[tempTS.length - 1].toString();
 
             $('#tempReading').text(latestTempReading + ' °C');
             $('#tempReadingTS').text('Latest reading: ' + latestReading.toString().substr(0, 21));
@@ -171,31 +190,53 @@ $(document).ready(() => {
             if (latestTempReading > 25) {
                 $("#tempReading").css({"color": chartColorsTransparent.red});
                 $("#tempReadingTS").css({"color": chartColorsTransparent.red});
+
+                $('#snapshotBtn').css({background: 'linear-gradient(to right,rgba(255, 99, 132, 0.8) 0%, ' +
+                        'rgba(255, 159, 64, 0.8) 50%, rgba(255, 99, 132, 0.8) 100%)'});
+                $('#snapshotBtn').css({background: '-webkit-gradient(to right,rgba(255, 99, 132, 0.8) 0%, ' +
+                        'rgba(255, 159, 64, 0.8) 50%, rgba(255, 99, 132, 0.8) 100%)'});
+                $("h1").css({color: chartColorsTransparent.red});
+                $("#weather").css({color: chartColorsTransparent.red});
+
             }
             else if (latestTempReading > 20 && latestTempReading <= 25) {
                 $("#tempReading").css({"color": chartColorsTransparent.orange});
                 $("#tempReadingTS").css({"color": chartColorsTransparent.orange});
+
+                $('#snapshotBtn').css({background: 'linear-gradient(to right,rgba(255, 99, 132, 0.8) 0%, ' +
+                        'rgba(255, 159, 64, 0.8) 50%, rgba(255, 205, 86, 0.8) 100%)'});
+                $('#snapshotBtn').css({background: '-webkit-gradient(to right,rgba(255, 99, 132, 0.8) 0%, ' +
+                        'rgba(255, 159, 64, 0.8) 50%, rgba(255, 205, 86, 0.8) 100%)'});
+                $("h1").css({color: chartColorsTransparent.orange});
+                $("#weather").css({color: chartColorsTransparent.orange});
             }
             else if (latestTempReading > -5 && latestTempReading <= 20) {
                 $("#tempReading").css({"color": chartColorsTransparent.green});
                 $("#tempReadingTS").css({"color": chartColorsTransparent.green});
+
+                $('#snapshotBtn').css({background: 'linear-gradient(to right, rgba(75, 192, 192, 0.8) 0%, ' +
+                        'rgba(54, 162, 235, 0.8) 50%, rgba(75, 192, 192, 0.8) 100%)'});
+                $('#snapshotBtn').css({background: '-webkit-gradient(to right, rgba(75, 192, 192, 0.8) 0%, ' +
+                        'rgba(54, 162, 235, 0.8) 50%, rgba(75, 192, 192, 0.8) 100%)'});
+                $("h1").css({color: chartColorsTransparent.green});
+                $("#weather").css({color: chartColorsTransparent.green});
             }
             else if (latestTempReading <= -5) {
                 $("#tempReading").css({"color": chartColorsTransparent.blue});
                 $("#tempReadingTS").css({"color": chartColorsTransparent.blue});
+
+                $('#snapshotBtn').css({background: 'linear-gradient(to right,rgba(54, 162, 235, 0.8) 0%, ' +
+                        'rgba(75, 192, 192, 0.8) 50%, rgba(54, 162, 235, 0.8) 100%)'});
+                $('#snapshotBtn').css({background: '-webkit-gradient(to right,rgba(54, 162, 235, 0.8) 0%, ' +
+                        'rgba(75, 192, 192, 0.8) 50%, rgba(54, 162, 235, 0.8) 100%)'});
+                $("h1").css({color: chartColorsTransparent.blue});
+                $("#weather").css({color: chartColorsTransparent.blue});
             }
             else {
-                $("#tempReading").css({"color": '#FFF'});
-                $("#tempReadingTS").css({"color": '#FFF'});
                 $('#tempReading').text('Something went wrong');
                 $('#tempReadingTS').text('Something went wrong');
             }
 
-         /*   $('#snapshotBtn').css({            background: linear-gradient(to right,$green 0%,$sand 50%,$peach 100%)
-        })
-            background: -webkit-gradient(to right,$green 0%,$sand 50%,$peach 100%)
-
-*/
             getWeatherForecast();
             displayTempChart(tempData, tempTS);
         })
