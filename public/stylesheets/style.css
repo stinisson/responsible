@@ -12,7 +12,7 @@ a {
 h1 {
   font-family: Helvetica, sans-serif;
   font-weight: 100;
-  font-size: 40px;
+  font-size: 45px;
   color: #fff;
   letter-spacing: 0.5em;
   text-align: center;
@@ -25,7 +25,7 @@ p {
   font-family: Helvetica, sans-serif;
   font-weight: 100;
   color: #fff;
-  font-size: 1.2em;
+  font-size: 1.3em;
   text-align: center;
   margin: 5px auto 10px;
   letter-spacing: 0.05em; }
@@ -43,7 +43,7 @@ button {
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
   color: #fff;
   cursor: pointer;
-  font: 1.3em Raleway, sans-serif;
+  font: 1.2em Raleway, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: 5rem;
@@ -54,7 +54,7 @@ button {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  width: 20rem;
+  width: 17rem;
   margin: 10px auto 20px; }
 
 button:hover {
@@ -89,6 +89,6 @@ button:hover {
   width: 1000px; }
 
 #chartSection {
-  width: 40%; }
+  width: 35%; }
 
 /*# sourceMappingURL=style.css.map */

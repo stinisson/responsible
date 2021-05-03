@@ -9,7 +9,12 @@ tempReadings = db.tempReading
 
 sensor_name = 'zuk1-6087db250d7ad41b79664ccc'
 # tempReadings.insert_one({'_id': sensor_name, 'temperature': []})
+with open('credentials.txt') as f:
+    telegramID = f.read()
 
+tempReadings.update_one({'_id': sensor_name},
+                        {"$set": {'users': [{'first_name': 'Stinisson', 'telegramID': telegramID}] } } )
+quit()
 
 while True:
     ct = datetime.datetime.now()
@@ -21,7 +26,7 @@ while True:
     print("Ts: ", ts)
     print("Temp °C: ", randomTemp)
     tempReadings.update_one({'_id': sensor_name}, {'$push': {"temperature": {
-            "timestamp": ts,
-            "degreesCelsius": randomTemp
+        "timestamp": ts,
+        "degreesCelsius": randomTemp
     }}})
     sleep(60)

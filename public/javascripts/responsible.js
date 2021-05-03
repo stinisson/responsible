@@ -195,7 +195,7 @@ $(document).ready(() => {
                         'rgba(255, 159, 64, 0.8) 50%, rgba(255, 99, 132, 0.8) 100%)'});
                 $('#snapshotBtn').css({background: '-webkit-gradient(to right,rgba(255, 99, 132, 0.8) 0%, ' +
                         'rgba(255, 159, 64, 0.8) 50%, rgba(255, 99, 132, 0.8) 100%)'});
-                $("h1").css({color: chartColorsTransparent.red});
+                $("h1").css({color: chartColorsTransparent.orange});
                 $("#weather").css({color: chartColorsTransparent.red});
 
             }
@@ -207,7 +207,7 @@ $(document).ready(() => {
                         'rgba(255, 159, 64, 0.8) 50%, rgba(255, 205, 86, 0.8) 100%)'});
                 $('#snapshotBtn').css({background: '-webkit-gradient(to right,rgba(255, 99, 132, 0.8) 0%, ' +
                         'rgba(255, 159, 64, 0.8) 50%, rgba(255, 205, 86, 0.8) 100%)'});
-                $("h1").css({color: chartColorsTransparent.orange});
+                $("h1").css({color: chartColorsTransparent.red});
                 $("#weather").css({color: chartColorsTransparent.orange});
             }
             else if (latestTempReading > -5 && latestTempReading <= 20) {
@@ -218,7 +218,7 @@ $(document).ready(() => {
                         'rgba(54, 162, 235, 0.8) 50%, rgba(75, 192, 192, 0.8) 100%)'});
                 $('#snapshotBtn').css({background: '-webkit-gradient(to right, rgba(75, 192, 192, 0.8) 0%, ' +
                         'rgba(54, 162, 235, 0.8) 50%, rgba(75, 192, 192, 0.8) 100%)'});
-                $("h1").css({color: chartColorsTransparent.green});
+                $("h1").css({color: chartColorsTransparent.blue});
                 $("#weather").css({color: chartColorsTransparent.green});
             }
             else if (latestTempReading <= -5) {
@@ -229,7 +229,7 @@ $(document).ready(() => {
                         'rgba(75, 192, 192, 0.8) 50%, rgba(54, 162, 235, 0.8) 100%)'});
                 $('#snapshotBtn').css({background: '-webkit-gradient(to right,rgba(54, 162, 235, 0.8) 0%, ' +
                         'rgba(75, 192, 192, 0.8) 50%, rgba(54, 162, 235, 0.8) 100%)'});
-                $("h1").css({color: chartColorsTransparent.blue});
+                $("h1").css({color: chartColorsTransparent.green});
                 $("#weather").css({color: chartColorsTransparent.blue});
             }
             else {

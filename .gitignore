@@ -1,3 +1,5 @@
+credentials.txt
+*.txt
 .idea
 
 # npm
@@ -111,3 +113,4 @@ dist
 
 # TernJS port file
 .tern-port
+credentials.txt
