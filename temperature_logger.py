@@ -1,4 +1,5 @@
 import datetime
+import json
 from time import sleep
 import random
 import pymongo
@@ -9,12 +10,13 @@ tempReadings = db.tempReading
 
 sensor_name = 'zuk1-6087db250d7ad41b79664ccc'
 # tempReadings.insert_one({'_id': sensor_name, 'temperature': []})
-with open('credentials.txt') as f:
-    telegramID = f.read()
 
-tempReadings.update_one({'_id': sensor_name},
-                        {"$set": {'users': [{'first_name': 'Stinisson', 'telegramID': telegramID}] } } )
-quit()
+with open('credentials.json') as json_file:
+    data = json.load(json_file)
+    print('telegramID: ' + data['username'])
+
+# tempReadings.update_one({'_id': sensor_name},
+#                         {"$set": {'users': [{'first_name': 'Stinisson', 'telegramID': data['username']}] } } )
 
 while True:
     ct = datetime.datetime.now()
