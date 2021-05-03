@@ -63,10 +63,6 @@ let displayTempChart = (tempData, tempTS) => {
 
     let tempBackgroundColor = [];
     let tempBorderColor = [];
-    //let tempData = [-20, -5, 0, 15, 20, 30]
-
-    //let tempData = [-20, -5, 0, 15, 20, 30;
-
     tempData.forEach(item => {
         if (item >= 25) {
             tempBorderColor.push(chartColors.red);
@@ -86,13 +82,16 @@ let displayTempChart = (tempData, tempTS) => {
         }
     });
 
+    // Display only the time of the reading as x-axis label
+    let readingTime = tempTS.map(function(e) {
+        e = e.toString().substr(16, 5);
+        return e;
+    });
     var ctx = document.getElementById('temperatureChart').getContext('2d');
     var myChart = new Chart(ctx, {
         type: 'line',
         data: {
-            // labels: ['2021-05-02 13:19', '2021-05-02 13:20Z', '2021-05-02 13:21Z', '2021-05-02 13:22Z', '2021-05-02 13:23Z',
-            // '2021-05-02 13:23Z'],
-            labels: tempTS,
+            labels: readingTime,
             datasets: [{
                 label: 'Current temperature',
                 data: tempData,
@@ -110,7 +109,16 @@ let displayTempChart = (tempData, tempTS) => {
                     title: {
                         display: true,
                         text: 'Temperature °C'
+
                     },
+                    grid: {
+                        display:false
+                    }
+                },
+                x: {
+                    grid: {
+                        display:false
+                    }
                 }
             }
         }
@@ -121,47 +129,36 @@ let displayTempChart = (tempData, tempTS) => {
 $(document).ready(() => {
     console.log('Client-side code running');
 
-    let tempData = [];
-    let tempTS = [];
-
-    //$('#tempReading').text('22 °C');
-
     $('#snapshotBtn').on("click", (evt) => {
         console.log("Clicked submitButton");
         console.log("Redirect to map");
         window.location.href = "/map";
     });
 
-
-
+    let tempData = [];
+    let tempTS = [];
     $.get('/getTemp', {})
         .done((data) => {
             console.log("Temperature readings: " + data['result']);
-            data['result'].forEach(element => {
 
-                console.log("LENGHT ", data['result'].length);
+            data['result'].forEach(element => {
+                console.log("LENGHT ", data['result'][0]['temperature'].length);
+                let numReadinngs = data['result'][0]['temperature'].length;
                 // TODO loop over length of retrieved temp items
-                for(let i = 0; i < 10; i++) {
+                for(let i = 0; i < numReadinngs; i++) {
                     let latestTempReading = element['temperature'][i]['degreesCelsius'];
                     tempData.push(latestTempReading);
 
-                    let latestReading = element['temperature'][i]['timestamp'];
-                    latestReading = new Date(latestReading * 1000).toString().substr(15, 6);
-                    tempTS.push(latestReading);
+                    let readingTS = element['temperature'][i]['timestamp'];
+                    readingTS = new Date(readingTS * 1000);
+                    tempTS.push(readingTS);
                 }
-                // TODO get the latest reading, resolve named element
-                let latestTempReading = element['temperature'][9]['degreesCelsius'];
-                let latestReading = element['temperature'][9]['timestamp'];
-                latestReading = new Date(latestReading * 1000);
+            });
+            let latestTempReading = tempData[tempData.length - 1];
+            let latestReading = tempTS[tempTS.length - 1];
+            $('#tempReading').text(latestTempReading + ' °C');
+            $('#tempReadingTS').text('Latest reading: ' + latestReading.toString().substr(0, 21));
 
-                console.log(element);
-                console.log(latestTempReading);
-                console.log(latestReading);
-                $('#tempReading').text(latestTempReading + ' °C');
-                $('#tempReadingTS').text('Latest reading: ' + latestReading.toString().substr(0, 21));
-
-
-            })
             getWeatherForecast();
             displayTempChart(tempData, tempTS);
         })
