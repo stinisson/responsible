@@ -9,17 +9,8 @@ console.log(botCredentials, 'the json obj');
 const MongoClient = mongodb.MongoClient;
 const dbURL = "mongodb://localhost";
 
-// TODO -polling_error -getTemp -> wrong reading
-
-function botSendTemperature(bot, sensorData) {
-    bot.on('message', (msg) => {
-        const chatId = msg.chat.id
-        if (msg.text === 'getTemp') {
-            let latestReading = new Date(sensorData.timestamp * 1000).toString().substr(0, 21);
-            bot.sendMessage(chatId, "Temperature: " + sensorData.lastReadTemp + "°C.\n" + latestReading);
-        }
-    });
-}
+// Start bot
+let bot = telegramBot();
 
 function telegramBot() {
     const token = botCredentials.accessToken
@@ -38,14 +29,43 @@ function telegramBot() {
         console.log('user registered')
         bot.sendMessage(chatId, 'Done.')
     })
-
-    return bot;
+    botSendTemperature(bot);
 }
+
+
+function botSendTemperature(bot) {
+    bot.on('message', (msg) => {
+        const chatId = msg.chat.id
+        if (msg.text === 'getTemp') {
+
+            MongoClient.connect(dbURL, {useUnifiedTopology: true}, (err, client) => {
+                if (err) throw err;
+                else {
+                    const db = client.db('responsible');
+                    const tempReading = db.collection('tempReading');
+
+                    tempReading.find( {}).project( { "temperature": { "$slice": -1 } }).toArray((err, tempData) => {
+                        if (err) throw err;
+                        else {
+                            // Check how many records were retrieved
+                            let numTempReadings = tempData[0]['temperature'].length;
+                            let latestTemp = tempData[0]['temperature'][numTempReadings - 1]['degreesCelsius'];
+                            let timestamp = tempData[0]['temperature'][numTempReadings - 1]['timestamp'];
+                            let readingDate = new Date(timestamp * 1000).toString().substr(0, 21);
+                            bot.sendMessage(chatId, "Temperature: " + latestTemp + "°C.\n" + readingDate);
+                        }
+                        client.close();
+                    });
+                }
+            });
+
+        }
+    });
+}
+
 
 router.get('/', (req, res) => {
     let sensorData = {};
-
-    let bot = telegramBot();
 
     MongoClient.connect(dbURL, {useUnifiedTopology: true}, (err, client) => {
         if (err) throw err;
@@ -59,10 +79,11 @@ router.get('/', (req, res) => {
                     let numTempReadings = tempData[0]['temperature'].length;
                     sensorData = {"lastReadTemp": tempData[0]['temperature'][numTempReadings - 1]['degreesCelsius'],
                         timestamp: tempData[0]['temperature'][numTempReadings - 1]['timestamp']};
+
                     console.log("sensor data: " + sensorData.lastReadTemp + " " + sensorData.timestamp);
 
                     res.json({result: tempData});
-                    botSendTemperature(bot, sensorData)
+                    //botSendTemperature(bot, sensorData);
                 }
                 client.close();
             });

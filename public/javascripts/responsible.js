@@ -149,8 +149,6 @@ $(document).ready(() => {
     console.log('Client-side code running');
 
     $('#snapshotBtn').on("click", (evt) => {
-        console.log("Clicked submitButton");
-        console.log("Redirect to map");
         window.location.href = "/map";
     });
 
@@ -158,18 +156,16 @@ $(document).ready(() => {
     let tempTS = [];
     $.get('/getTemp', {})
         .done((data) => {
-            console.log("Temperature readings: " + data['result']);
 
             data['result'].forEach(element => {
-                console.log("LENGHT ", data['result'][0]['temperature'].length);
-                let numReadinngs = data['result'][0]['temperature'].length;
-                // TODO loop over length of retrieved temp items
-                for(let i = 0; i < numReadinngs; i++) {
-                    let latestTempReading = element['temperature'][i]['degreesCelsius'];
-                    tempData.push(latestTempReading);
+                let numReadings = data['result'][0]['temperature'].length;
 
+                for (let i = 0; i < numReadings; i++) {
+                    let latestTempReading = element['temperature'][i]['degreesCelsius'];
                     let readingTS = element['temperature'][i]['timestamp'];
                     readingTS = new Date(readingTS * 1000);
+
+                    tempData.push(latestTempReading);
                     tempTS.push(readingTS);
                 }
             });
@@ -179,6 +175,7 @@ $(document).ready(() => {
             $('#tempReading').text(latestTempReading + ' °C');
             $('#tempReadingTS').text('Latest reading: ' + latestReading.toString().substr(0, 21));
 
+            // TODO
             const chartColorsTransparent = {
                 red: 'rgba(255, 99, 132, 0.8)',
                 orange: 'rgba(255, 159, 64, 0.8)',
@@ -187,6 +184,7 @@ $(document).ready(() => {
                 blue: 'rgba(54, 162, 235, 0.8)'
             }
 
+            // TODO button gradient not working
             if (latestTempReading > 25) {
                 $("#tempReading").css({"color": chartColorsTransparent.red});
                 $("#tempReadingTS").css({"color": chartColorsTransparent.red});
