@@ -35,7 +35,6 @@ let getWeatherForecast = () => {
             let currentWeather = forecast['timeSeries'][0]['parameters'][18]['values'][0];
             let forecastValidTime = new Date(forecast['timeSeries'][0]['validTime']).toISOString().replace('T', ' ').substr(0, 16);
             forecastValidTime += 'Z';
-            console.log(forecastValidTime);
             $('#weather').text("The weather in Gothenburg is " + currentTemp + " °C with " + weatherSymbol[currentWeather].toLowerCase());
         })
         .fail((xhr) => {
@@ -44,7 +43,7 @@ let getWeatherForecast = () => {
         });
 }
 
-let displayTempChart = (tempData, tempTS) => {
+function getColor(temperature) {
     const chartColors = {
         red: 'rgb(255, 99, 132)',
         orange: 'rgb(255, 159, 64)',
@@ -52,51 +51,67 @@ let displayTempChart = (tempData, tempTS) => {
         green: 'rgb(75, 192, 192)',
         blue: 'rgb(54, 162, 235)',
     };
-
-    const chartColorsTransparent = {
-        red: 'rgba(255, 99, 132, 0.8)',
-        orange: 'rgba(255, 159, 64, 0.8)',
-        yellow: 'rgba(255, 205, 86, 0.8)',
-        green: 'rgba(75, 192, 192, 0.8)',
-        blue: 'rgba(54, 162, 235, 0.8)'
+    let backgroundColor = null;
+    if (temperature > 25) {
+        backgroundColor = chartColors.red;
     }
+    else if (temperature > 20 && temperature <= 25) {
+        backgroundColor = chartColors.orange;
+    }
+    else if (temperature > -5 && temperature <= 20) {
+        backgroundColor = chartColors.green;
+    }
+    else if (temperature <= -5) {
+        backgroundColor = chartColors.blue;
+    }
+    else {
+        backgroundColor = '#FFF';
+    }
+    return backgroundColor;
+}
 
-    let tempBackgroundColor = [];
-    let tempBorderColor = [];
-    tempData.forEach(temp => {
-        if (temp > 25) {
-            tempBorderColor.push(chartColors.red);
-            tempBackgroundColor.push(chartColorsTransparent.red);
-        }
-        else if (temp > 20 && temp <= 25) {
-            tempBorderColor.push(chartColors.orange);
-            tempBackgroundColor.push(chartColorsTransparent.orange);
-        }
-        else if (temp > -5 && temp <= 20) {
-            tempBorderColor.push(chartColors.green);
-            tempBackgroundColor.push(chartColorsTransparent.green);
-        }
-        else if (temp <= -5) {
-            tempBorderColor.push(chartColors.blue);
-            tempBackgroundColor.push(chartColorsTransparent.blue);
-        }
+
+function addData(chart, temperature, readingDate) {
+    let backgroundColor = getColor(temperature);
+
+    // Add the latest temperature reading
+    chart.data.labels.push(readingDate);
+    chart.data.datasets.forEach((dataset) => {
+        dataset.data.push(temperature);
+        dataset.backgroundColor = backgroundColor;
+        dataset.borderColor = backgroundColor;
     });
 
-    // Display only the time of the reading as x-axis label
-    let readingTime = tempTS.map(function(e) {
+    // Remove first data point
+    chart.data.labels.shift();
+    chart.data.datasets.forEach((dataset) => {
+        dataset.data.shift();
+    });
+
+    chart.update();
+}
+
+let setupChart = (temperatures, readingDates) => {
+
+    let backgroundColor = getColor(temperatures[temperatures.length - 1]);
+    let borderColor = backgroundColor;
+
+    // Use only time of the temperature reading as x-axis label
+    let readingTime = readingDates.map(function(e) {
         e = e.toString().substr(16, 5);
         return e;
     });
+
     var ctx = document.getElementById('temperatureChart').getContext('2d');
-    var myChart = new Chart(ctx, {
+    var chart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: readingTime,
             datasets: [{
                 label: 'Current temperature',
-                data: tempData,
-                backgroundColor: tempBackgroundColor,
-                borderColor: tempBorderColor[tempBorderColor.length - 1],
+                data: temperatures,
+                backgroundColor: backgroundColor,
+                borderColor: borderColor,
                 borderWidth: 2,
                 pointRadius: 7
             }]
@@ -142,109 +157,117 @@ let displayTempChart = (tempData, tempTS) => {
             }
         }
     });
-
+    return chart;
 }
 
 $(document).ready(() => {
     console.log('Client-side code running');
 
+    getWeatherForecast();
+    getTemperatureReading();
     $('#snapshotBtn').on("click", (evt) => {
         window.location.href = "/map";
     });
 
-    let tempData = [];
-    let tempTS = [];
-    $.get('/getTemp', {})
-        .done((data) => {
+    setInterval(getTemperatureReading, 5000);
+    let chartIsInitialized = false;
+    let chart = "";
+    function getTemperatureReading() {
+        let tempData = [];
+        let tempTS = [];
+        $.get('/getTemp', {})
+            .done((data) => {
 
-            data['result'].forEach(element => {
-                let numReadings = data['result'][0]['temperature'].length;
+                data['result'].forEach(element => {
+                    let numReadings = data['result'][0]['temperature'].length;
 
-                for (let i = 0; i < numReadings; i++) {
-                    let latestTempReading = element['temperature'][i]['degreesCelsius'];
-                    let readingTS = element['temperature'][i]['timestamp'];
-                    readingTS = new Date(readingTS * 1000);
+                    for (let i = 0; i < numReadings; i++) {
+                        let latestTempReading = element['temperature'][i]['degreesCelsius'];
+                        let readingTS = element['temperature'][i]['timestamp'];
+                        readingTS = new Date(readingTS * 1000);
 
-                    tempData.push(latestTempReading);
-                    tempTS.push(readingTS);
+                        tempData.push(latestTempReading);
+                        tempTS.push(readingTS);
+                    }
+                });
+                let latestTempReading = tempData[tempData.length - 1];
+                let latestReading = tempTS[tempTS.length - 1].toString();
+
+                $('#tempReading').text(latestTempReading + ' °C');
+                $('#tempReadingTS').text('Latest reading: ' + latestReading.toString().substr(0, 21));
+
+                // TODO
+                const chartColorsTransparent = {
+                    red: 'rgba(255, 99, 132, 0.8)',
+                    orange: 'rgba(255, 159, 64, 0.8)',
+                    yellow: 'rgba(255, 205, 86, 0.8)',
+                    green: 'rgba(75, 192, 192, 0.8)',
+                    blue: 'rgba(54, 162, 235, 0.8)'
                 }
+
+                // TODO button gradient not working
+                if (latestTempReading > 25) {
+                    $("#tempReading").css({"color": chartColorsTransparent.red});
+                    $("#tempReadingTS").css({"color": chartColorsTransparent.red});
+
+                    $('#snapshotBtn').css({background: 'linear-gradient(to right,rgba(255, 99, 132, 0.8) 0%, ' +
+                            'rgba(255, 159, 64, 0.8) 50%, rgba(255, 99, 132, 0.8) 100%)'});
+                    $('#snapshotBtn').css({background: '-webkit-gradient(to right,rgba(255, 99, 132, 0.8) 0%, ' +
+                            'rgba(255, 159, 64, 0.8) 50%, rgba(255, 99, 132, 0.8) 100%)'});
+                    $("h1").css({color: chartColorsTransparent.orange});
+                    $("#weather").css({color: chartColorsTransparent.red});
+
+                }
+                else if (latestTempReading > 20 && latestTempReading <= 25) {
+                    $("#tempReading").css({"color": chartColorsTransparent.orange});
+                    $("#tempReadingTS").css({"color": chartColorsTransparent.orange});
+
+                    $('#snapshotBtn').css({background: 'linear-gradient(to right,rgba(255, 99, 132, 0.8) 0%, ' +
+                            'rgba(255, 159, 64, 0.8) 50%, rgba(255, 205, 86, 0.8) 100%)'});
+                    $('#snapshotBtn').css({background: '-webkit-gradient(to right,rgba(255, 99, 132, 0.8) 0%, ' +
+                            'rgba(255, 159, 64, 0.8) 50%, rgba(255, 205, 86, 0.8) 100%)'});
+                    $("h1").css({color: chartColorsTransparent.red});
+                    $("#weather").css({color: chartColorsTransparent.orange});
+                }
+                else if (latestTempReading > -5 && latestTempReading <= 20) {
+                    $("#tempReading").css({"color": chartColorsTransparent.green});
+                    $("#tempReadingTS").css({"color": chartColorsTransparent.green});
+
+                    $('#snapshotBtn').css({background: 'linear-gradient(to right, rgba(75, 192, 192, 0.8) 0%, ' +
+                            'rgba(54, 162, 235, 0.8) 50%, rgba(75, 192, 192, 0.8) 100%)'});
+                    $('#snapshotBtn').css({background: '-webkit-gradient(to right, rgba(75, 192, 192, 0.8) 0%, ' +
+                            'rgba(54, 162, 235, 0.8) 50%, rgba(75, 192, 192, 0.8) 100%)'});
+                    $("h1").css({color: chartColorsTransparent.blue});
+                    $("#weather").css({color: chartColorsTransparent.green});
+                }
+                else if (latestTempReading <= -5) {
+                    $("#tempReading").css({"color": chartColorsTransparent.blue});
+                    $("#tempReadingTS").css({"color": chartColorsTransparent.blue});
+
+                    $('#snapshotBtn').css({background: 'linear-gradient(to right,rgba(54, 162, 235, 0.8) 0%, ' +
+                            'rgba(75, 192, 192, 0.8) 50%, rgba(54, 162, 235, 0.8) 100%)'});
+                    $('#snapshotBtn').css({background: '-webkit-gradient(to right,rgba(54, 162, 235, 0.8) 0%, ' +
+                            'rgba(75, 192, 192, 0.8) 50%, rgba(54, 162, 235, 0.8) 100%)'});
+                    $("h1").css({color: chartColorsTransparent.green});
+                    $("#weather").css({color: chartColorsTransparent.blue});
+                }
+                else {
+                    $('#tempReading').text('Something went wrong');
+                    $('#tempReadingTS').text('Something went wrong');
+                }
+
+                if (!chartIsInitialized) {
+                    chart = setupChart(tempData, tempTS);
+                    chartIsInitialized = true;
+                }
+                else {
+                    addData(chart, latestTempReading, latestReading.toString().substr(16, 5));
+                }
+            })
+            .fail((xhr) => {
+                alert('Problem contacting server');
+                console.log(xhr);
             });
-            let latestTempReading = tempData[tempData.length - 1];
-            let latestReading = tempTS[tempTS.length - 1].toString();
-
-            $('#tempReading').text(latestTempReading + ' °C');
-            $('#tempReadingTS').text('Latest reading: ' + latestReading.toString().substr(0, 21));
-
-            // TODO
-            const chartColorsTransparent = {
-                red: 'rgba(255, 99, 132, 0.8)',
-                orange: 'rgba(255, 159, 64, 0.8)',
-                yellow: 'rgba(255, 205, 86, 0.8)',
-                green: 'rgba(75, 192, 192, 0.8)',
-                blue: 'rgba(54, 162, 235, 0.8)'
-            }
-
-            // TODO button gradient not working
-            if (latestTempReading > 25) {
-                $("#tempReading").css({"color": chartColorsTransparent.red});
-                $("#tempReadingTS").css({"color": chartColorsTransparent.red});
-
-                $('#snapshotBtn').css({background: 'linear-gradient(to right,rgba(255, 99, 132, 0.8) 0%, ' +
-                        'rgba(255, 159, 64, 0.8) 50%, rgba(255, 99, 132, 0.8) 100%)'});
-                $('#snapshotBtn').css({background: '-webkit-gradient(to right,rgba(255, 99, 132, 0.8) 0%, ' +
-                        'rgba(255, 159, 64, 0.8) 50%, rgba(255, 99, 132, 0.8) 100%)'});
-                $("h1").css({color: chartColorsTransparent.orange});
-                $("#weather").css({color: chartColorsTransparent.red});
-
-            }
-            else if (latestTempReading > 20 && latestTempReading <= 25) {
-                $("#tempReading").css({"color": chartColorsTransparent.orange});
-                $("#tempReadingTS").css({"color": chartColorsTransparent.orange});
-
-                $('#snapshotBtn').css({background: 'linear-gradient(to right,rgba(255, 99, 132, 0.8) 0%, ' +
-                        'rgba(255, 159, 64, 0.8) 50%, rgba(255, 205, 86, 0.8) 100%)'});
-                $('#snapshotBtn').css({background: '-webkit-gradient(to right,rgba(255, 99, 132, 0.8) 0%, ' +
-                        'rgba(255, 159, 64, 0.8) 50%, rgba(255, 205, 86, 0.8) 100%)'});
-                $("h1").css({color: chartColorsTransparent.red});
-                $("#weather").css({color: chartColorsTransparent.orange});
-            }
-            else if (latestTempReading > -5 && latestTempReading <= 20) {
-                $("#tempReading").css({"color": chartColorsTransparent.green});
-                $("#tempReadingTS").css({"color": chartColorsTransparent.green});
-
-                $('#snapshotBtn').css({background: 'linear-gradient(to right, rgba(75, 192, 192, 0.8) 0%, ' +
-                        'rgba(54, 162, 235, 0.8) 50%, rgba(75, 192, 192, 0.8) 100%)'});
-                $('#snapshotBtn').css({background: '-webkit-gradient(to right, rgba(75, 192, 192, 0.8) 0%, ' +
-                        'rgba(54, 162, 235, 0.8) 50%, rgba(75, 192, 192, 0.8) 100%)'});
-                $("h1").css({color: chartColorsTransparent.blue});
-                $("#weather").css({color: chartColorsTransparent.green});
-            }
-            else if (latestTempReading <= -5) {
-                $("#tempReading").css({"color": chartColorsTransparent.blue});
-                $("#tempReadingTS").css({"color": chartColorsTransparent.blue});
-
-                $('#snapshotBtn').css({background: 'linear-gradient(to right,rgba(54, 162, 235, 0.8) 0%, ' +
-                        'rgba(75, 192, 192, 0.8) 50%, rgba(54, 162, 235, 0.8) 100%)'});
-                $('#snapshotBtn').css({background: '-webkit-gradient(to right,rgba(54, 162, 235, 0.8) 0%, ' +
-                        'rgba(75, 192, 192, 0.8) 50%, rgba(54, 162, 235, 0.8) 100%)'});
-                $("h1").css({color: chartColorsTransparent.green});
-                $("#weather").css({color: chartColorsTransparent.blue});
-            }
-            else {
-                $('#tempReading').text('Something went wrong');
-                $('#tempReadingTS').text('Something went wrong');
-            }
-
-            getWeatherForecast();
-            displayTempChart(tempData, tempTS);
-        })
-        .fail((xhr) => {
-            alert('Problem contacting server');
-            console.log(xhr);
-        });
+    }
 
 });
-
-
-
-

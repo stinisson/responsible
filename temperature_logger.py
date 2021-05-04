@@ -31,4 +31,4 @@ while True:
         "timestamp": ts,
         "degreesCelsius": randomTemp
     }}})
-    sleep(60)
+    sleep(5)

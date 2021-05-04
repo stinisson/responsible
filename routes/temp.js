@@ -36,7 +36,7 @@ function telegramBot() {
 function botSendTemperature(bot) {
     bot.on('message', (msg) => {
         const chatId = msg.chat.id
-        if (msg.text === 'getTemp') {
+        if (msg.text === 'temp') {
 
             MongoClient.connect(dbURL, {useUnifiedTopology: true}, (err, client) => {
                 if (err) throw err;
