@@ -18,7 +18,7 @@ let getWeatherForecast = () => {
 }
 
 function getColor(temperature) {
-    let backgroundColor = null;
+    let backgroundColor;
     if (temperature > 25) {
         backgroundColor = chartColors.red;
     }
@@ -54,7 +54,6 @@ function addData(chart, temperature, readingDate) {
     chart.data.datasets.forEach((dataset) => {
         dataset.data.shift();
     });
-
     chart.update();
 }
 
@@ -162,19 +161,7 @@ $(document).ready(() => {
 
                 $('#tempReading').text(latestTempReading + ' °C');
                 $('#tempReadingTS').text('Latest reading: ' + latestReading.toString().substr(0, 21));
-
-                // TODO
-
-/*
-                const chartColors = {
-                    red: 'rgb(255, 99, 132)',
-                    orange: 'rgb(255, 159, 64)',
-                    yellow: 'rgb(255, 205, 86)',
-                    green: 'rgb(75, 192, 192)',
-                    blue: 'rgb(54, 162, 235)',
-                };
-*/
-
+                
                 // TODO button gradient not working
                 if (latestTempReading > 25) {
                     $("#tempReading").css({"color": chartColors.red});
