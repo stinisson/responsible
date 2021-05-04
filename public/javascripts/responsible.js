@@ -133,7 +133,8 @@ $(document).ready(() => {
     getTemperatureReading();
     $('#snapshotBtn').on("click", (evt) => {
         window.location.href = "/map";
-    });
+        $("#snapshotBtn").css({background: chartColors.green});
+    })
 
     setInterval(getTemperatureReading, 5000);
     let chartIsInitialized = false;
@@ -161,52 +162,51 @@ $(document).ready(() => {
 
                 $('#tempReading').text(latestTempReading + ' °C');
                 $('#tempReadingTS').text('Latest reading: ' + latestReading.toString().substr(0, 21));
-                
+
                 // TODO button gradient not working
                 if (latestTempReading > 25) {
                     $("#tempReading").css({"color": chartColors.red});
                     $("#tempReadingTS").css({"color": chartColors.red});
-
-                    $('#snapshotBtn').css({background: 'linear-gradient(to right,rgba(255, 99, 132, 0.8) 0%, ' +
-                            'rgba(255, 159, 64, 0.8) 50%, rgba(255, 99, 132, 0.8) 100%)'});
-                    $('#snapshotBtn').css({background: '-webkit-gradient(to right,rgba(255, 99, 132, 0.8) 0%, ' +
-                            'rgba(255, 159, 64, 0.8) 50%, rgba(255, 99, 132, 0.8) 100%)'});
                     $("h1").css({color: chartColors.orange});
                     $("#weather").css({color: chartColors.red});
 
+                    $('#snapshotBtn').css({background: `linear-gradient(to right, ${chartColors.red} 0%, 
+                    ${chartColors.orange} 50%, ${chartColors.red} 100%)` });
+                    $('#snapshotBtn').css({background: `-webkit-gradient(to right, ${chartColors.red} 0%, 
+                    ${chartColors.orange} 50%, ${chartColors.red} 100%)` });
                 }
                 else if (latestTempReading > 20 && latestTempReading <= 25) {
                     $("#tempReading").css({"color": chartColors.orange});
                     $("#tempReadingTS").css({"color": chartColors.orange});
-
-                    $('#snapshotBtn').css({background: 'linear-gradient(to right,rgba(255, 99, 132, 0.8) 0%, ' +
-                            'rgba(255, 159, 64, 0.8) 50%, rgba(255, 205, 86, 0.8) 100%)'});
-                    $('#snapshotBtn').css({background: '-webkit-gradient(to right,rgba(255, 99, 132, 0.8) 0%, ' +
-                            'rgba(255, 159, 64, 0.8) 50%, rgba(255, 205, 86, 0.8) 100%)'});
                     $("h1").css({color: chartColors.red});
                     $("#weather").css({color: chartColors.orange});
+
+                    $('#snapshotBtn').css({background: `linear-gradient(to right, ${chartColors.red} 0%, 
+                    ${chartColors.orange} 50%, ${chartColors.yellow} 100%)` });
+                    $('#snapshotBtn').css({background: `-webkit-gradient(to right, ${chartColors.red} 0%, 
+                    ${chartColors.orange} 50%, ${chartColors.yellow} 100%)` });
                 }
                 else if (latestTempReading > -5 && latestTempReading <= 20) {
                     $("#tempReading").css({"color": chartColors.green});
                     $("#tempReadingTS").css({"color": chartColors.green});
-
-                    $('#snapshotBtn').css({background: 'linear-gradient(to right, rgba(75, 192, 192, 0.8) 0%, ' +
-                            'rgba(54, 162, 235, 0.8) 50%, rgba(75, 192, 192, 0.8) 100%)'});
-                    $('#snapshotBtn').css({background: '-webkit-gradient(to right, rgba(75, 192, 192, 0.8) 0%, ' +
-                            'rgba(54, 162, 235, 0.8) 50%, rgba(75, 192, 192, 0.8) 100%)'});
                     $("h1").css({color: chartColors.blue});
                     $("#weather").css({color: chartColors.green});
+
+                    $('#snapshotBtn').css({background: `linear-gradient(to right, ${chartColors.green} 0%, 
+                    ${chartColors.blue} 50%, ${chartColors.green} 100%)` });
+                    $('#snapshotBtn').css({background: `-webkit-gradient(to right, ${chartColors.green} 0%, 
+                    ${chartColors.blue} 50%, ${chartColors.green} 100%)` });
                 }
                 else if (latestTempReading <= -5) {
                     $("#tempReading").css({"color": chartColors.blue});
                     $("#tempReadingTS").css({"color": chartColors.blue});
-
-                    $('#snapshotBtn').css({background: 'linear-gradient(to right,rgba(54, 162, 235, 0.8) 0%, ' +
-                            'rgba(75, 192, 192, 0.8) 50%, rgba(54, 162, 235, 0.8) 100%)'});
-                    $('#snapshotBtn').css({background: '-webkit-gradient(to right,rgba(54, 162, 235, 0.8) 0%, ' +
-                            'rgba(75, 192, 192, 0.8) 50%, rgba(54, 162, 235, 0.8) 100%)'});
                     $("h1").css({color: chartColors.green});
                     $("#weather").css({color: chartColors.blue});
+
+                    $('#snapshotBtn').css({background: `linear-gradient(to right, ${chartColors.blue} 0%, 
+                    ${chartColors.green} 50%, ${chartColors.blue} 100%)` });
+                    $('#snapshotBtn').css({background: `-webkit-gradient(to right, ${chartColors.blue} 0%, 
+                    ${chartColors.green} 50%, ${chartColors.blue} 100%)` });
                 }
                 else {
                     $('#tempReading').text('Something went wrong');

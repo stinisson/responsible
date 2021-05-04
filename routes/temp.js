@@ -3,7 +3,6 @@ var router = express.Router();
 const mongodb = require('mongodb');
 const TelegramBot = require('node-telegram-bot-api')
 let botCredentials = require('../telegramBot.json');
-console.log(botCredentials, 'the json obj');
 
 // MongoDB setup
 const MongoClient = mongodb.MongoClient;
@@ -31,7 +30,6 @@ function telegramBot() {
     })
     botSendTemperature(bot);
 }
-
 
 function botSendTemperature(bot) {
     bot.on('message', (msg) => {
@@ -63,7 +61,6 @@ function botSendTemperature(bot) {
     });
 }
 
-
 router.get('/', (req, res) => {
     let sensorData = {};
 
@@ -89,7 +86,6 @@ router.get('/', (req, res) => {
             });
         }
     });
-
 });
 
 module.exports = router;
