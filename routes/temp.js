@@ -10,25 +10,19 @@ const dbURL = "mongodb://localhost";
 
 // Start bot
 let bot = telegramBot();
+let users = botRegister(bot);
+
 
 function telegramBot() {
     const token = botCredentials.accessToken
     const bot = new TelegramBot(token, { polling: true })
     bot.onText(/\/echo (.+)/, (msg, match) => {
-
         const chatId = msg.chat.id
         const resp = match[1]
         bot.sendMessage(chatId, resp)
     });
-
-    let users = []
-    bot.onText(/\/register/, (msg, match) => {
-        const chatId = msg.chat.id
-        users.push(chatId)
-        console.log('user registered')
-        bot.sendMessage(chatId, 'Done.')
-    })
     botSendTemperature(bot);
+    return bot;
 }
 
 function botSendTemperature(bot) {
@@ -61,6 +55,39 @@ function botSendTemperature(bot) {
     });
 }
 
+function botRegister(bot) {
+    let users = []
+    bot.onText(/\/register/, (msg, match) => {
+        const chatId = msg.chat.id
+        users.push(chatId)
+        console.log('user registered')
+        bot.sendMessage(chatId, 'Done.')
+    })
+    return users;
+}
+
+/*function botAlarm(bot, temperature, chatId) {
+    console.log("IN botAlarm")
+    if (temperature > 25) {
+        console.log("temp too high")
+        bot.sendMessage(chatId, "Temperature is too high! " + temperature + "°C!");
+    }
+
+}*/
+
+function botAlarm(bot, temperature, users) {
+    if (users.length > 0) {
+        for (let i = 0; i < users.length; i++) {
+
+            if (temperature > 25) {
+                bot.sendMessage(users[i], "Temperature is too high! " + temperature + "°C!");
+            }
+        }
+    } else {
+        console.log('no user registered')
+    }
+}
+
 router.get('/', (req, res) => {
     let sensorData = {};
 
@@ -79,8 +106,9 @@ router.get('/', (req, res) => {
 
                     console.log("sensor data: " + sensorData.lastReadTemp + " " + sensorData.timestamp);
 
+                    botAlarm(bot, sensorData.lastReadTemp, users)
                     res.json({result: tempData});
-                    //botSendTemperature(bot, sensorData);
+
                 }
                 client.close();
             });
